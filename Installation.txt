@@ -1,0 +1,14 @@
+AdminConsole CORE
+
+1. Unzip AdminConsole CORE 0.9.
+2. Create database with name which you like.
+3. Import SQL file into your databse. It will create database with name > ac_core_post_setup <.
+4. Rename it to > posts < or > ac_posts < database prefix (ac_) name is your choice (best choice where are multiple AdminConsole Core).
+5. Open ac-config.php and insert into it your login information into database 
+   username, password, and databse name and if you use prefix then it insert into $table_prefix=" YOUR PREFIX HERE ". Example: ($table_prefix="ac_")
+6. Then for editing you must insert your passowrd into   $ac_password = " HERE YOUR PASSWORD ". Example: $ac_password = "1234". You can change aslo $ac_username.
+7. Open index.php and insert there you Navbar, Footer and more. Links to pages and posts are index.php?page= NUMBER OF PAGE OR POST. Example: index.php?page=2.
+8. CSS, JavaScript and images are include in includes/css, inludes/js, inludes/img. All CSS and JavaScript is automaticlly inserted into 
+   (if you didn't separate it into folders for frameworks and more) index.php on launch.
+9. For start editing write into url ac-login or ac-login.php
+10. That is all, Happy editing

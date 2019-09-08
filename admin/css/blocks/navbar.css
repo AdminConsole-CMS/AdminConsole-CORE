@@ -1,0 +1,186 @@
+/*
+ * AdminConsole CORE is released under the GNU General Public License.
+ * LICENSE.txt files in the main directory.
+*/
+
+/* AdminConsole Navbar */
+
+#ac-navbar {
+  height: 50px;
+  top: 0;
+  right: 0;
+  left: 0;
+  position: fixed;
+  transition: 0.5s;
+  z-index: 1000;	
+}
+
+#ac-navbar {
+  margin-left: 230px;
+}
+
+#ac-navbar.active {
+  margin-left: 0;
+}
+
+@media (max-width: 576px) {
+  #ac-navbar {
+    margin-left: 0;
+  }
+}
+
+#ac-navbar .nav {
+  margin-left: 8px;
+}
+
+#ac-navbar .navbar-toggler {
+  margin-right: 8px;
+  background-position: center;
+  border-color: #fff;
+}
+
+/* AdminConsole Logo */
+
+@media (max-width: 991px) {
+  #ac-navbar .ac-logo {
+    left: 50%;
+    position: sticky;
+  }
+}
+
+@media (max-width: 576px) {
+  #ac-navbar .ac-logo {
+    left: 50%;
+    transform: translateX(-50%);
+    position: sticky;
+  }
+}
+
+#ac-navbar .ac-logo {
+  height: 50px;
+  width: 50px;
+  padding: 5px 0;
+  background-image: url("../../img/ac2.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* AdminConsole Navbar Content */
+
+#ac-navbar .navbar {
+  padding: 0;
+  background-color: #303030;
+}
+
+#ac-navbar .nav-item a {
+  color: #ffffff;
+  cursor: pointer;
+}
+
+#ac-navbar .nav-item a.active {
+  text-decoration: underline;
+}
+
+#ac-navbar .nav-link i {
+  font-size: 18px;
+}
+
+@media (max-width: 991px) {
+  #ac-navbar .nav-link {
+    padding: 4px!important;
+  }
+}
+
+#ac-navbar .navbar-toggler:focus {
+  outline: none;
+}
+
+/* AdminConsole Sidebar Collapse Icon */
+
+#ac-navbar .navbar-collapse-icon {
+  height: 40px;
+  margin: -5px 16px 0 0;
+  padding: 0;
+  font-size: 20px;
+  line-height: 40px;
+  transition: 0.5s;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+#ac-navbar .navbar-collapse-icon.active {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+  #ac-navbar .navbar-collapse-icon {
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 992px) {
+  #ac-navbar .navbar-collapse-icon {
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  #ac-navbar .navbar-collapse-icon {
+    transform: rotate(180deg);
+  }
+}
+
+@media (max-width: 576px) {
+  #ac-navbar .navbar-collapse-icon.active {
+    transform: rotate(0deg);
+  }
+}
+
+/* AdminConsole Navbar Dropdown */
+
+#ac-navbar .dropdown-menu {
+  margin: 0;
+  border-radius: 0 0 .25rem .25rem;
+  background-color: #303030;
+}
+
+#ac-navbar .dropdown-menu a:hover {
+  background-color: #505050;
+}
+
+#ac-navbar .dropdown-menu i {
+  font-size: 20px;
+}
+
+#ac-navbar .dropdown-toggle {
+  margin-left: 8px;
+}
+
+@media (max-width: 991px) {
+  #ac-navbar .dropdown-toggle {
+    padding: 8px 0 !important;
+  }
+}
+
+#ac-navbar .dropdown-toggle img {
+  width: 40px;
+  height: 40px;
+  margin: -4px 0;
+  border: solid;
+  border-radius: 50px;
+  border-width: 1px;
+  border-color: #000000;
+  background-color: #000000;
+}
+
+/* AdminConsole Navbar Dropdown Arrow */
+
+#ac-navbar .dropdown-toggle::after {
+  transition: 0.5s;
+}
+
+#ac-navbar .dropdown.show .dropdown-toggle::after {
+  transform: rotate(-180deg);
+}
+
