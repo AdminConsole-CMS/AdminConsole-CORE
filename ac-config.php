@@ -21,7 +21,7 @@ define("AC_DB_NAME", "accore");
 define("AC_DB_CHARSET", "utf8");
 
 /* AdminConsole database table prefix.*/
-$table_prefix  = '';
+$table_prefix  = '8xfw6';
 
 
 
@@ -37,8 +37,10 @@ mysqli_set_charset($conn,AC_DB_CHARSET);
 
 
 $ac_username = "Admin";
-$ac_password = "";
+$ac_password = "1234";
 
-$admin_console_version = "0.9";
+include 'ac-version.php';
+
+date_default_timezone_set('Europe/Bratislava');
 
 ?>

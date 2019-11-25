@@ -1,35 +1,92 @@
 <?php
 
 /*
- * AdminConsole CORE is released under the GNU General Public License.
+ * adminConsole CORE is released under the GNU General Public License.
  * LICENSE.txt files in the main directory.
 */
 
-session_start();
 require 'ac-config.php';
 
-$logout = "";
-
-if (isset($_GET["action"])) {
+if (isset($_GET["action"])){
 	
-	$url = $_GET["action"];
+	if ($_GET["action"] == "login"){
 	
-	if($url == "login") { 
-	
-		$ac_login_username = $_POST["username"];
-		$ac_login_password = $_POST["password"];	
-	
-	}elseif ($url == "logout") {
+		if ($_SERVER["REQUEST_METHOD"] == "POST"){
+			
+			if(isset($_REQUEST['username'])){
+				
+				$login_username = $_REQUEST['username'];
+				
+			}		
+				
+			if (isset($_REQUEST['password'])){
+				
+				$login_password = $_REQUEST['password'];
+				
+			}
+			
+			if (isset($_REQUEST['remember'])){
+				
+				$login_remember = $_REQUEST['remember'];
+				
+				if ($login_remember == TRUE){
+					
+					setcookie("username", $login_username, time() + (86400), "/");
+					
+				}				
+			}else {
+				
+				setcookie("username", "", time() - (86400 * 30), "/");
+				
+			}		
 		
+    		if (!empty($login_username)){						
+				
+				if (!empty($login_password)){
+					
+					if (strtolower($ac_username) == strtolower($login_username)) {
+						
+						if ($ac_password == $login_password) {
+							
+							session_start();
+							$_SESSION["AC-ADMIN-USERNAME"] = $ac_username;							
+							echo 'success';
+							exit;
+							
+						}else {
+							
+							echo '<h5 class="red">Invalid Log In informations</h5>';
+							exit;
+							
+						}
+						
+					}else {
+						
+						echo '<h5 class="red">Invalid Log In informations</h5>';
+						exit;
+						
+					}						
+				}else {
+					
+					echo '<h5 class="red">Invalid Log In informations</h5>';
+					exit;
+					
+				}				
+    		}else {
+				echo '<h5 class="red">Invalid Log In informations</h5>';
+				exit;
+		
+    		}	
+		}
+		
+	}elseif ($_GET["action"] == "logout"){
+		
+		session_start();
 		session_destroy();
-		$logout = '  <div class="ac-login-information">
-                     <h6>Log Out Successfully</h6>
-                     </div> ';
-
-	}
-	
+		header("Location: ac-login.php");
+		
+	}			
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -37,82 +94,61 @@ if (isset($_GET["action"])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>AdminConsole CORE Login</title>
+    <title>AC Login</title>
 	<meta name="robots" content="noindex">
-    <link rel="icon" type="image/png" sizes="16x16" href="admin/img/favicon16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="admin/img/favicon32.png">
-    <link rel="icon" type="image/png" sizes="180x180" href="admin/img/favicon180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="admin/img/favicon192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="admin/img/favicon512.png">
-    <link rel="stylesheet" href="admin/css/bootstrap.min.css">
-    <link rel="stylesheet" href="admin/css/FontAwesome/fontawesome-all.min.css">
-	<link rel="stylesheet" href="admin/css/FontAwesome/font-awesome.min.css">
+    <link rel="icon" href="admin/img/favicon.ico">
+    <link rel="stylesheet" href="admin/css/ac-bootstrap.css">
     <link rel="stylesheet" href="admin/css/ac-login.css">	
 </head>
 
 <body>
-    <div id="ac-login">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="ac-login-div">
-                        <div class="ac-login-content">
-                            <div class="text-center"><img src="admin/img/ac1.png"></div>
-							
-							<?php  
-							
-							if (isset($_GET["action"])) {
-	
-								$url = $_GET["action"];
-								
-								if ($url == "login") {
-								
-									if (isset($ac_login_username)) {
-								
-										if ($ac_login_username == $ac_username){  
-								
-										if ($ac_login_password == $ac_password) {
-									 
-											$_SESSION["username"] = "Admin";
-											
-											header("Location: admin/index.php");
-									
-										}else {
-									
-											echo '  <div class="ac-login-information">
-                                					<h6>Invalid Login Information</h6>
-                            						</div> ';	
-									
-										}
-								
-										}else {
-								
-											echo '  <div class="ac-login-information">
-                                					<h6>Invalid Login Information</h6>
-                            						</div> ';	
-								
-										}								
-									}
-								}	
-							}
-							echo $logout;
-							?>
-                           
-                            <div class="ac-login-form">
-                                <form method="post" action="ac-login.php?action=login">
-                                    <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Username or E-mail Address"></div>
-                                    <div class="form-group"><input class="form-control" type="password" name="password" autocomplete="off" placeholder="Password"></div>
-                                    <div class="form-group"><button class="btn btn-primary" type="submit">Log&nbsp;In</button></div>
-                                </form>
-                            </div>
-                            <div class="ac-login-additional"><a href="index.php"><i class="fas fa-long-arrow-alt-left"></i>&nbsp;Back to site</a></div>
-                        </div>
-                    </div>
+ <div id="ac-login" class="light">
+    <div class="ac-login-form">
+        <div class="ac-login-form-div">
+            <div>
+                <div class="text-center"><img src="admin/img/ac.png"></div>
+                <div class="ac-login-info">
+                    
                 </div>
+                <form id="ac-login-form">
+                    <div class="form-group back"><input type="text" class="form-control2" name="username" value="<?php if(isset($_COOKIE["username"])){ echo $_COOKIE["username"]; } ?>" placeholder="Username / E-mail address"></div>
+                    <div class="form-group back"><input type="password" class="form-control2" name="password" placeholder="Password"></div>
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="remember" name="remember" value="TRUE"><label class="custom-control-label" for="remember">Remember me</label></div>
+                    </div>
+                    <div class="form-group"><button class="btn btn-primary" type="submit">Log In</button></div>
+                </form>
+                <div class="ac-login-add"><a href="index.php">«&nbsp;Back&nbsp;to&nbsp;site</a></div>
             </div>
         </div>
     </div>
-    <script src="admin/js/jquery.min.js"></script>
-    <script src="admin/js/bootstrap.min.js"></script>
+</div>
+<script src="admin/js/jquery.js"></script>
+<script src="admin/js/bootstrap.js"></script>
+<script>
+$(function () {
+	
+	$('#ac-login-form').on('submit', function (e) {
+		
+		e.preventDefault();
+		
+		$.ajax({
+			type: 'post',
+			url: 'ac-login.php?action=login',
+			data: $(this).serialize(),
+			success: function (data) {
+				
+				if (data == "success"){
+					window.location = "admin/index.php";
+				}else {					
+					$('.ac-login-info').html(data);
+				}
+			}
+		});
+		
+	});
+	
+});	
+</script>	
 </body>
 </html>

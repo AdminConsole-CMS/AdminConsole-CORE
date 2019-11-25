@@ -1,0 +1,26 @@
+/* AdminConsole Content Editor */
+#ac-content .editor-top {
+  margin-bottom: 10px;
+}
+#ac-content .editor-top .ac-alert {
+  margin: 0;
+}
+#ac-content .editor .form-group {
+  margin-bottom: 10px;
+}
+#ac-content .editor .editor-sidebar .editor-sidebar-part {
+  border: solid;
+  border-width: 1px;
+  border-color: #ced4da;
+  padding: 10px;
+  background-color: #fff;
+}
+#ac-content .editor .editor-sidebar .editor-sidebar-part .informations .col {
+  padding: 0;
+}
+#ac-content .editor .editor-sidebar .editor-sidebar-part .informations p {
+  margin: 0;
+}
+#ac-content .editor .editor-sidebar .editor-sidebar-part .informations .hightlight {
+  color: #006FC0;
+}

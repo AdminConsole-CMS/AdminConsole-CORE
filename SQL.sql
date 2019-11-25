@@ -1,16 +1,49 @@
+CREATE TABLE `articles` (
+  `ID` int(11) NOT NULL,
+  `article_date` datetime NOT NULL,
+  `article_date_gmt` datetime NOT NULL,
+  `article_title` varchar(256) NOT NULL,
+  `article_name` varchar(256) NOT NULL,
+  `article_content` longtext NOT NULL,
+  `article_type` varchar(256) NOT NULL,
+  `article_parent` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `ac_core_post_setup`;
-CREATE TABLE IF NOT EXISTS `ac_core_post_setup` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `post_title` varchar(256) NOT NULL,
-  `post_content` longtext NOT NULL,
-  `post_type` varchar(256) NOT NULL,
-  `inherit` int(11) NOT NULL,
-  `post_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ID`)
-) AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+CREATE TABLE `images` (
+  `ID` int(11) NOT NULL,
+  `image_date` datetime NOT NULL,
+  `image_date_gmt` datetime NOT NULL,
+  `image_name` mediumtext NOT NULL,
+  `image_alt` varchar(256) NOT NULL,
+  `image_size` varchar(256) NOT NULL,
+  `image_location` varchar(256) NOT NULL,
+  `image_mime` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `ac_core_post_setup` (`ID`, `post_title`, `post_content`, `post_type`, `inherit`, `post_date`) VALUES
-(1, 'Home', 'This is Homepage!', 'page', 0, 'CURRENT_TIMESTAMP'),
-(2, 'Post', 'This is Post!', 'post', 1, 'CURRENT_TIMESTAMP');
+CREATE TABLE `pages` (
+  `ID` int(11) NOT NULL,
+  `page_date` datetime NOT NULL,
+  `page_date_gmt` datetime NOT NULL,
+  `page_title` varchar(256) NOT NULL,
+  `page_name` varchar(256) NOT NULL,
+  `page_content` longtext NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `articles`
+  ADD PRIMARY KEY (`ID`);
+
+ALTER TABLE `images`
+  ADD PRIMARY KEY (`ID`);
+
+ALTER TABLE `pages`
+  ADD PRIMARY KEY (`ID`);
+
+ALTER TABLE `articles`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `images`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `pages`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;

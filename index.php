@@ -7,42 +7,41 @@
 
 require 'ac-config.php';
 
-require 'includes/functions.php';
-
-if (isset($_GET["page"])) {
-	
-	$url = $_GET["page"];
-	
-} elseif (empty($_GET["page"])) {
-	
-	$url = "1"; /* Index have number 1 */
-		
+if (file_exists('ac-update.php')){
+	header("Location: ac-update.php");
 }
 
-if (isset($url)){
+if (file_exists('ac-upgrade.php')){
+	header("Location: ac-upgrade.php");
+}
+
+if (isset($_GET["p"])) {
 	
-	$sql = "SELECT * FROM $table_prefix.posts WHERE ID='$url'";
+	$name = $_GET["p"];
+	$sql = "SELECT * FROM pages WHERE page_name='$name'";
 	$result = $conn->query($sql);
 	
 	if ($result->num_rows > 0) {
     
     	while ($row = $result->fetch_assoc()) {
 		
-        	$pageContent = "<div>".$row["post_content"]."</div>";
+        	$pageContent = "<div>".$row["page_content"]."</div>";
 		
-			$pageTitle = $row["post_title"];
+			$pageTitle = $row["page_title"];
 			
-			$postContent[] = "";
+			$articleContent[] = "";
+			
+			$pageID = $row["ID"];
     	}
 		
-	$sql2 = "SELECT * FROM $table_prefix.posts WHERE inherit='$url' AND post_type='post'";
+	$sql2 = "SELECT * FROM articles WHERE article_type='i' AND article_parent='$pageID'";
 	$result2 = $conn->query($sql2);
 	
 	if ($result2->num_rows > 0) {
     
     	while ($row2 = $result2->fetch_assoc()) {	
 			
-        	$postContent[] = "<div>".$row2["post_content"]."</div>";
+        	$articleContent[] = "<div>".$row2["article_content"]."</div>";
     	}
 	}
 		
@@ -52,55 +51,73 @@ if (isset($url)){
 		
     $pageContent = "Page does not exist!";
 		
-	$postContent[] = "";	
+	$articleContent[] = "";	
 		
-	}		
+	}
+	
+} elseif (empty($_GET["p"])) {
+	
+	$sql = "SELECT * FROM pages WHERE ID='1'";
+	$result = $conn->query($sql);
+	
+	if ($result->num_rows > 0) {
+    
+    	while ($row = $result->fetch_assoc()) {
+		
+        	$pageContent = "<div>".$row["page_content"]."</div>";
+		
+			$pageTitle = $row["page_title"];
+			
+			$articleContent[] = "";
+    	}
+		
+	$sql2 = "SELECT * FROM articles WHERE article_type='i' AND article_parent='1'";
+	$result2 = $conn->query($sql2);
+	
+	if ($result2->num_rows > 0) {
+    
+    	while ($row2 = $result2->fetch_assoc()) {	
+			
+        	$articleContent[] = "<div>".$row2["article_content"]."</div>";
+    	}
+	}
+		
+	}else {
+	
+	$pageTitle = "404";	
+		
+    $pageContent = "Page does not exist!";
+		
+	$articleContent[] = "";	
+		
+	}	
+		
 }
-
-/* Favicon type and extension for simple edit */
-
-$favicon_type = "image/png";
-$favicon_extension = "png"; /* Dot is already included */
 
 ?>	
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	
 <title> <?php echo $pageTitle ?> </title>
-<!-- Simple meta tags -->		
+	
 <meta name="author" content="">
 <meta name="description" content=""> 
-<meta name="theme-color" content="">	
-<meta name="generator" content="Admin Console CORE">	
-<!-- Favicons location -->		
-<link rel="icon" type="<?php echo $favicon_type ?>" sizes="16x16" href="includes/img/favicon/favicon16.<?php echo $favicon_extension ?>">
-<link rel="icon" type="<?php echo $favicon_type ?>" sizes="32x32" href="includes/img/favicon/favicon32.<?php echo $favicon_extension ?>">
-<link rel="icon" type="<?php echo $favicon_type ?>" sizes="180x180" href="includes/img/favicon/favicon180.<?php echo $favicon_extension ?>">
-<link rel="icon" type="<?php echo $favicon_type ?>" sizes="192x192" href="includes/img/favicon/favicon192.<?php echo $favicon_extension ?>">
-<link rel="icon" type="<?php echo $favicon_type ?>" sizes="512x512" href="includes/img/favicon/favicon512.<?php echo $favicon_extension ?>"> 
-	
-<!-- <link rel="stylesheet" href="includes/css/style.css"> --> 	<!-- This is include automaticlly -->
-<?php include_css() ?>
-<?php include_js() ?>	
+
+<?php require "themes/default/head.php"; ?>
 </head>
 
 <body>
+<?php require "themes/default/header.php"; ?>
+<main class="container">
+	<?php 
 	
- <!-- Header, (Navbar, ...) -->	
-<header>
-</header>
+	echo $pageContent.implode($articleContent);
 	
-<!-- Main, here AdminConsole show all your pages and posts -->	
-<main>
-	
-	<?php echo $pageContent.implode($postContent)?>
-	
-</main>
-	
-<!-- Footer, (Copyright, GDPR, Cookies ) -->	
-<footer>	
-</footer>	
-	
+	?>
+</main>	
+<?php require "themes/default/footer.php"; ?>		
 </body>
 </html>

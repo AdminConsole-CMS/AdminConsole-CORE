@@ -8,47 +8,38 @@
 session_start();
 require "../ac-config.php";
 
-if (empty($_SESSION['username'])) {
-	
-	header("Location: ../ac-login.php");
-	
-	}
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>AdminConsole CORE</title>
-	<meta name="robots" content="noindex">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon32.png">
-    <link rel="icon" type="image/png" sizes="180x180" href="img/favicon180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="img/favicon192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="img/favicon512.png">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/FontAwesome/fontawesome-all.min.css">
-	<link rel="stylesheet" href="css/FontAwesome/font-awesome.min.css">
-    <link rel="stylesheet" href="css/blocks/content.css">
-    <link rel="stylesheet" href="css/blocks/navbar.css">
-    <link rel="stylesheet" href="css/blocks/sidebar.css">
+	<link rel="icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="css/ac-bootstrap.css">
+    <link rel="stylesheet" href="fonts/FontAwesome/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
     <?php
-	require "includes/admin-navbar.php";
-	require "includes/admin-sidebar.php";
+	require "includes/interface/ac-navbar.php";
+	require "includes/interface/ac-sidebar.php";	
 	?>
     
     <div id="ac-content">
 		<h1 class="text-center">Welcome back!</h1>
+		<button class="btn btn-primary" type="button">Button</button><button class="btn btn-danger" type="button">Button</button><button class="btn btn-warning" type="button">Button</button><button class="btn btn-success" type="button">Button</button>
+        <form><input class="form-control2" type="text"></form>
+        <p>Paragraph</p>
+		<div class="ac-alert">
+			<p>test</p>
+		</div>
     </div>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/ac-fullscreen.js"></script>
-    <script src="js/ac-sidebar-collapse.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/ac-scripts.js"></script>
 </body>
-
 </html>

@@ -20,23 +20,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 		if ($_GET["action"] == "new"){
 			
 			if (isset($_POST["title"])){
-				$page_title = $_POST["title"];
-				$page_name_low = ACCENTS($page_title);
-				$page_name_acc = ACCENTS($page_title);
-				$page_name_low = strtolower($page_name_acc);
-				$page_name = str_replace(" ", "-", $page_name_low);
+				$article_title = $_POST["title"];
+				$article_name_acc = ACCENTS($article_title);
+				$article_name_low = strtolower($article_name_acc);
+				$article_name = str_replace(" ", "-", $article_name_low);
 			}
 			if (isset($_POST["content"])){
-				$page_content = $_POST["content"];
+				$article_content = $_POST["content"];
 			}
-			$page_date = date("Y-m-d H:i");
-			$page_date_gmt = gmdate("Y-m-d H:i");	
-			$sql = "INSERT INTO pages (page_date, page_date_gmt, page_title, page_name, page_content) VALUES ('$page_date', '$page_date_gmt', '$page_title', '$page_name', '$page_content')";
+			if (isset($_POST["parent"])){
+				$article_parent = $_POST["parent"];
+			}
+			if($article_parent == 0){
+				$article_type = "a";
+			}else {
+				$article_type = "i";
+			}
+			$article_date = date("Y-m-d H:i");
+			$article_date_gmt = gmdate("Y-m-d H:i");	
+			$sql = "INSERT INTO articles (article_date, article_date_gmt, article_title, article_name, article_content, article_type, article_parent) VALUES ('$article_date', '$article_date_gmt', '$article_title', '$article_name', '$article_content', '$article_type', '$article_parent')";
 
 			if ($conn->query($sql) === TRUE) {
     			$ac_alert = "Page was succesfully added!";
 			} else {
-    			$ac_alert = "<strong>Error:</strong> " . $sql. "<br>" . $conn->error;
+    			echo $ac_alert = "<strong>Error:</strong> " . $sql. "<br>" . $conn->error;
 			}
 		}
 		
@@ -81,6 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 	autosave_retention: "0",
 } );
 	</script>
+	
 </head>
 
 <body>
@@ -91,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     
     <div id="ac-content">
 		<div>
-			<h3>New page</h1>
+			<h3>New article</h1>
 		</div>
 		<div class="container-fluid editor-top">
 			<div class="row">
@@ -106,15 +114,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 					?>
 				</div>
     			<div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">					
-					<button class="btn btn-primary btn-block" type="submit" form="ac-page-new">Publish</button>	
+					<button class="btn btn-primary btn-block" type="submit" form="ac-article-new">Publish</button>	
 				</div>
 			</div>
 		</div>
 		<div class="container-fluid">
 			<div class="row editor">
 				<div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
-					<form id="ac-page-new"  method="post" action="page-new.php?action=new">
-						<div class="form-group"><input type="text" class="form-control2 form-control-lg" name="title" placeholder="Page title" required></div>
+					<form id="ac-article-new"  method="post" action="article-new.php?action=new">
+						<div class="form-group"><input type="text" class="form-control2 form-control-lg" name="title" placeholder="Article title" required></div>
 						<div class="form-group"><button class="btn btn-primary" type="button" data-target="#add-image" data-toggle="modal">Insert image</button>
 							<div role="dialog" tabindex="-1" class="modal fade" id="add-image">
     							<div class="modal-dialog modal-xl" role="document">
@@ -144,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 						echo '<tr>';
 							echo '<td>'.$row["ID"].'</td>';
 							echo '<td>'.$row["image_name"].'</td>';
-							echo '<td><button class="btn btn-primary btn-sm btn-add-image" type="button" aria-location="'. (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".str_replace("admin/page-new.php", "", $_SERVER['PHP_SELF']).$row["image_location"].'">Button</button></td>';
+							echo '<td><button class="btn btn-primary btn-sm btn-add-image" type="button" aria-location="'. (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".str_replace("admin/article-new.php", "", $_SERVER['PHP_SELF']).$row["image_location"].'">Button</button></td>';
 						echo '</tr>';	
 							
     					}
@@ -172,14 +180,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 								<div class="col">
 									<p class="text-right hightlight">Public</p>
 								</div>
-							</div>							
+							</div>
+							<div class="row">
+								<div class="col">
+									<p class="text-left">Parent:</p>
+								</div>
+								<div class="col">
+									<select name="parent" form="ac-article-new" required>
+									<option value="0" selected>This article will be lonely</option>	
+									<?php 
+									$sql = "SELECT * FROM pages ORDER BY ID ASC";
+								$result = $conn->query($sql);
+
+					if ($result->num_rows > 0){
+						
+    					while($row = $result->fetch_assoc()) {
+							
+						echo '<option value="'.$row["ID"].'">'.$row["page_title"].'</option>';	
+							
+    					}
+					}
+					?>
+									
+									</select>
+								</div>
+							</div>
 						</div>
 					</div>	
 				</div>
 			</div>
 		</div>
     </div>
-		<script>
+	<script>
 	
 	$(function () {
 	

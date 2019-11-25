@@ -18,30 +18,37 @@ if (isset($_GET["action"])){
 	switch ($_GET["action"]) {
 			
 			case "update":
-				if ($_SERVER["REQUEST_METHOD"] == "POST"){
+				
+			if ($_SERVER["REQUEST_METHOD"] == "POST"){
 					
 					if (isset($_POST["id"])){
-			
-					if (isset($_POST["title"])){
-				$page_title = $_POST["title"];
-				$page_name_low = ACCENTS($page_title);
-				$page_name_acc = ACCENTS($page_title);
-				$page_name_low = strtolower($page_name_acc);
-				$page_name = str_replace(" ", "-", $page_name_low);
+						
+						if (isset($_POST["title"])){
+				$article_title = $_POST["title"];
+				$article_name_acc = ACCENTS($article_title);
+				$article_name_low = strtolower($article_name_acc);
+				$article_name = str_replace(" ", "-", $article_name_low);
 			}
 			if (isset($_POST["content"])){
-				$page_content = $_POST["content"];
+				$article_content = $_POST["content"];
 			}
-					
-			$sql = "UPDATE pages SET page_title='$page_title', page_name='$page_name', page_content='$page_content' WHERE ID=".$_POST["id"]."";
+			if (isset($_POST["parent"])){
+				$article_parent = $_POST["parent"];
+			}
+			if($article_parent == 0){
+				$article_type = "a";
+			}else {
+				$article_type = "i";
+			}
+	
+					$sql = "UPDATE articles SET article_title='$article_title', article_name='$article_name', article_content='$article_content', article_type='$article_type', article_parent='$article_parent'  WHERE ID=".$_POST["id"]."";
 
 						if ($conn->query($sql) === TRUE) {
-    	header("Location: page.php");
+    	header("Location: article.php");
 	
-							}	
-		}
-				}
-
+							}					
+						}														
+					}
 				break;
 			
 			case "delete":
@@ -50,22 +57,19 @@ if (isset($_GET["action"])){
 					
 					if (isset($_POST["id"])){
 	
-					$sql = "DELETE FROM pages WHERE ID=".$_POST["id"]."";
+					$sql = "DELETE FROM articles WHERE ID=".$_POST["id"]."";
 
 								if ($conn->query($sql) === TRUE) {
 								
-									$ac_alert = "Page is successfully deleted!";
+									$ac_alert = "Article is successfully deleted!";
 								}						
 						}														
 					}
 				break;
-			
-		case "update":
-			
-			break;
 
 		}
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -81,7 +85,7 @@ if (isset($_GET["action"])){
     <link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/editor.css">
 	<script src="js/jquery.js"></script>
-			<script src="js/tinymce/jquery.tinymce.min.js"></script>
+		<script src="js/tinymce/jquery.tinymce.min.js"></script>
 	<script src="js/tinymce/tinymce.min.js"></script>
 	<script>
 	
@@ -109,7 +113,7 @@ if (isset($_GET["action"])){
     
     <div id="ac-content">
 		<div>
-			<h3>Pages <a href="page-new.php" class="btn btn-primary">Add new</a></h1>
+			<h3>Articles <a href="article-new.php" class="btn btn-primary">Add new</a></h1>
 		</div>
 		<?php
 					
@@ -128,16 +132,16 @@ if (isset($_GET["action"])){
         		<thead>
            			<tr>
                 		<th>ID</th>
-                		<th>Page title</th>
-                		<th>Page name</th>
-                		<th>Page date</th>
-                		<th>Page date GMT</th>
+                		<th>Article title</th>
+                		<th>Article name</th>
+                		<th>Article date</th>
+                		<th>Article date GMT</th>
 						<th>Edit</th>
 						<th>Delete</th>
             		</tr>
         		</thead>
-        	<tbody>';
-					$sql = "SELECT * FROM pages ORDER BY ID asc LIMIT 1";
+        	<tbody>';					
+					$sql = "SELECT * FROM articles ORDER BY ID asc";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){
@@ -146,37 +150,18 @@ if (isset($_GET["action"])){
 							
 						echo '<tr>';
 							echo '<td>'.$row["ID"].'</td>';
-							echo '<td>'.$row["page_title"].'</td>';
-							echo '<td>'.$row["page_name"].'</td>';
-							echo '<td>'.$row["page_date"].'</td>';
-							echo '<td>'.$row["page_date_gmt"].'</td>';
-							echo '<td colspan="2"><form method="post" action="page.php?action=edit"><input type="hidden" name="id" value="'.$row["ID"].'"><button class="btn btn-success btn-sm ac-edit-page" type="submit">Edit</button></form></td>';
-						echo '</tr>';	
-							
-    					}
-					} 
-					
-					$sql2 = "SELECT * FROM pages ORDER BY ID asc LIMIT 100000000 OFFSET 1 ";
-					$result2 = $conn->query($sql2);
-
-					if ($result2->num_rows > 0){
-						
-    					while($row2 = $result2->fetch_assoc()) {
-							
-						echo '<tr>';
-							echo '<td>'.$row2["ID"].'</td>';
-							echo '<td>'.$row2["page_title"].'</td>';
-							echo '<td>'.$row2["page_name"].'</td>';
-							echo '<td>'.$row2["page_date"].'</td>';
-							echo '<td>'.$row2["page_date_gmt"].'</td>';
-							echo '<td><form method="post" action="page.php?action=edit"><input type="hidden" name="id" value="'.$row2["ID"].'"><button class="btn btn-success btn-sm ac-edit-page" type="submit">Edit</button></form></td>';
-							echo '<td><form method="post" action="page.php?action=delete"><input type="hidden" name="id" value="'.$row2["ID"].'"><button class="btn btn-danger btn-sm ac-delete-page" type="submit" aria-id="">Delete</button></form></td>';
+							echo '<td>'.$row["article_title"].'</td>';
+							echo '<td>'.$row["article_name"].'</td>';
+							echo '<td>'.$row["article_date"].'</td>';
+							echo '<td>'.$row["article_date_gmt"].'</td>';
+							echo '<td><form method="post" action="article.php?action=edit"><input type="hidden" name="id" value="'.$row["ID"].'"><button class="btn btn-success btn-sm" type="submit">Edit</button></form></td>';
+							echo '<td><form method="post" action="article.php?action=delete"><input type="hidden" name="id" value="'.$row["ID"].'"><button class="btn btn-danger btn-sm" type="submit" aria-id="">Delete</button></form></td>';
 						echo '</tr>';	
 							
     					}
 					} else {
 						echo '<tr>';
-    						echo '<td colspan="7" class="text-center">No pages!</td>';
+    						echo '<td colspan="7" class="text-center">No articles!</td>';
 						echo '</tr>';
 					}
 echo '
@@ -191,16 +176,16 @@ echo '
         		<thead>
            			<tr>
                 		<th>ID</th>
-                		<th>Page title</th>
-                		<th>Page name</th>
-                		<th>Page date</th>
-                		<th>Page date GMT</th>
+                		<th>Article title</th>
+                		<th>Article name</th>
+                		<th>Article date</th>
+                		<th>Article date GMT</th>
 						<th>Edit</th>
 						<th>Delete</th>
             		</tr>
         		</thead>
-        	<tbody>';
-					$sql = "SELECT * FROM pages ORDER BY ID asc LIMIT 1";
+        	<tbody>';					
+					$sql = "SELECT * FROM articles ORDER BY ID asc";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){
@@ -209,37 +194,18 @@ echo '
 							
 						echo '<tr>';
 							echo '<td>'.$row["ID"].'</td>';
-							echo '<td>'.$row["page_title"].'</td>';
-							echo '<td>'.$row["page_name"].'</td>';
-							echo '<td>'.$row["page_date"].'</td>';
-							echo '<td>'.$row["page_date_gmt"].'</td>';
-							echo '<td colspan="2"><form method="post" action="page.php?action=edit"><input type="hidden" name="id" value="'.$row["ID"].'"><button class="btn btn-success btn-sm ac-edit-page" type="submit">Edit</button></form></td>';
-						echo '</tr>';	
-							
-    					}
-					} 
-					
-					$sql2 = "SELECT * FROM pages ORDER BY ID asc LIMIT 100000000 OFFSET 1 ";
-					$result2 = $conn->query($sql2);
-
-					if ($result2->num_rows > 0){
-						
-    					while($row2 = $result2->fetch_assoc()) {
-							
-						echo '<tr>';
-							echo '<td>'.$row2["ID"].'</td>';
-							echo '<td>'.$row2["page_title"].'</td>';
-							echo '<td>'.$row2["page_name"].'</td>';
-							echo '<td>'.$row2["page_date"].'</td>';
-							echo '<td>'.$row2["page_date_gmt"].'</td>';
-							echo '<td><form method="post" action="page.php?action=edit"><input type="hidden" name="id" value="'.$row2["ID"].'"><button class="btn btn-success btn-sm ac-edit-page" type="submit">Edit</button></form></td>';
-							echo '<td><form method="post" action="page.php?action=delete"><input type="hidden" name="id" value="'.$row2["ID"].'"><button class="btn btn-danger btn-sm ac-delete-page" type="submit" aria-id="">Delete</button></form></td>';
+							echo '<td>'.$row["article_title"].'</td>';
+							echo '<td>'.$row["article_name"].'</td>';
+							echo '<td>'.$row["article_date"].'</td>';
+							echo '<td>'.$row["article_date_gmt"].'</td>';
+							echo '<td><form method="post" action="article.php?action=edit"><input type="hidden" name="id" value="'.$row["ID"].'"><button class="btn btn-success btn-sm" type="submit">Edit</button></form></td>';
+							echo '<td><form method="post" action="article.php?action=delete"><input type="hidden" name="id" value="'.$row["ID"].'"><button class="btn btn-danger btn-sm" type="submit" aria-id="">Delete</button></form></td>';
 						echo '</tr>';	
 							
     					}
 					} else {
 						echo '<tr>';
-    						echo '<td colspan="7" class="text-center">No pages!</td>';
+    						echo '<td colspan="7" class="text-center">No articles!</td>';
 						echo '</tr>';
 					}
 echo '
@@ -251,7 +217,7 @@ echo '
 		}elseif ($_GET["action"] == "edit"){
 			
 			$id = $_POST['id'];
-			$sql = "SELECT * FROM pages WHERE ID='$id'";
+			$sql = "SELECT * FROM articles WHERE ID='$id'";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){
@@ -273,16 +239,16 @@ echo '
 					}
 				echo '</div>
     			<div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">					
-					<button class="btn btn-primary btn-block" type="submit" form="ac-page-update">Publish</button>	
+					<button class="btn btn-primary btn-block" type="submit" form="ac-article-update">Publish</button>	
 				</div>
 			</div>
 		</div>
 		<div class="container-fluid">
 			<div class="row editor">
 				<div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
-					<form id="ac-page-update"  method="post" action="page.php?action=update">
+					<form id="ac-article-update"  method="post" action="article.php?action=update">
 					<input type="hidden" name="id" value="'.$row["ID"].'">
-						<div class="form-group"><input type="text" class="form-control2 form-control-lg" name="title" placeholder="page title" value="'.$row["page_title"].'" required></div>
+						<div class="form-group"><input type="text" class="form-control2 form-control-lg" name="title" placeholder="Article title" value="'.$row["article_title"].'" required></div>
 						<div class="form-group"><button class="btn btn-primary" type="button" data-target="#add-image" data-toggle="modal">Insert image</button>
 							<div role="dialog" tabindex="-1" class="modal fade" id="add-image">
     							<div class="modal-dialog modal-xl" role="document">
@@ -311,7 +277,7 @@ echo '
 						echo '<tr>';
 							echo '<td>'.$row2["ID"].'</td>';
 							echo '<td>'.$row2["image_name"].'</td>';
-							echo '<td><button class="btn btn-primary btn-sm btn-add-image" type="button" aria-location="'. (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".str_replace("admin/page.php", "", $_SERVER['PHP_SELF']).$row2["image_location"].'">Button</button></td>';
+							echo '<td><button class="btn btn-primary btn-sm btn-add-image" type="button" aria-location="'. (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".str_replace("admin/article.php", "", $_SERVER['PHP_SELF']).$row2["image_location"].'">Button</button></td>';
 						echo '</tr>';	
 							
     					}
@@ -326,7 +292,7 @@ echo '
     							</div>
 							</div>
 						</div>
-						<div class="form-group"><textarea class="form-control tinymce" name="content">'.$row["page_content"].'</textarea></div>
+						<div class="form-group"><textarea class="form-control tinymce" name="content">'.$row["article_content"].'</textarea></div>
 					</form>
 				</div>
     			<div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 editor-sidebar">
@@ -340,6 +306,46 @@ echo '
 									<p class="text-right hightlight">Public</p>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col">
+									<p class="text-left">Parent:</p>
+								</div>
+								<div class="col">
+									<select name="parent" form="ac-article-update" required>
+									';
+							if ($row["article_type"] == "a"){
+								echo '<option value="0" selected>This article will be lonely</option>';
+							}elseif ($row["article_type"] == "i"){
+								echo '<option value="'.$row["article_parent"].'" selected>'; 
+								$parent = $row["article_parent"];
+								$sql4 = "SELECT * FROM pages WHERE ID=$parent";
+								$result4 = $conn->query($sql4);
+
+					if ($result4->num_rows > 0){
+						
+    					while($row4 = $result4->fetch_assoc()) {
+							
+						echo $row4["page_title"];	
+							
+    					}
+					}echo'</option>	';
+								echo '<option value="0">This article will be lonely</option>';
+							}
+									$sql3 = "SELECT * FROM pages ORDER BY ID ASC";
+								$result3 = $conn->query($sql3);
+
+					if ($result3->num_rows > 0){
+						
+    					while($row3 = $result3->fetch_assoc()) {
+							
+						echo '<option value="'.$row3["ID"].'">'.$row3["page_title"].'</option>';	
+							
+    					}
+					}
+					echo '
+									
+									</select>
+								</div>
 							</div>
 						</div>
 					</div>	
