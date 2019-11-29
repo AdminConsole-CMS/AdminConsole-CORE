@@ -36,12 +36,6 @@ if (empty($_SESSION["AC-ADMIN-USERNAME"])) {
     
     <div id="ac-content">
 		<h1 class="text-center">Welcome back!</h1>
-		<button class="btn btn-primary" type="button">Button</button><button class="btn btn-danger" type="button">Button</button><button class="btn btn-warning" type="button">Button</button><button class="btn btn-success" type="button">Button</button>
-        <form><input class="form-control2" type="text"></form>
-        <p>Paragraph</p>
-		<div class="ac-alert">
-			<p>test</p>
-		</div>
     </div>
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>
