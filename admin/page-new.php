@@ -79,6 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 	branding: false,
 	height: 500,
 	autosave_retention: "0",
+	convert_urls: false,	
 } );
 	</script>
 </head>

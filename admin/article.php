@@ -101,6 +101,7 @@ if (isset($_GET["action"])){
 	branding: false,
 	height: 500,
 	autosave_retention: "0",
+	convert_urls: false,	
 } );
 	</script>
 </head>
