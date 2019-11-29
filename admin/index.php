@@ -7,6 +7,11 @@
 
 session_start();
 require "../ac-config.php";
+if (empty($_SESSION["AC-ADMIN-USERNAME"])) {
+	
+	header("Location: ../ac-login.php");
+	
+	}
 
 ?>
 
