@@ -354,6 +354,19 @@ echo '
 		
 		?>
     </div>
+	<script>
+	
+		$(function () {
+
+		$('.btn-add-image').click(function (e) {
+
+			var location = $(this).attr('aria-location');
+			tinymce.activeEditor.execCommand('mceInsertContent', false, '<img src="'+location+'" width="100px" alt="">');
+
+		});	
+	});
+			
+	</script>
     <script src="js/bootstrap.js"></script>
     <script src="js/ac-scripts.js"></script>
 </body>
