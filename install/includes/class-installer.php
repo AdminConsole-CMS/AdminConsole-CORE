@@ -269,22 +269,22 @@ class AC_Installer{
 			echo $this->db_password;
 		}
 		
-		$sql = "CREATE TABLE IF NOT EXISTS `ac_".$this->db_prefix."_settings` (  `ID` int(11) NOT NULL AUTO_INCREMENT,  `name` varchar(256) NOT NULL,  `value` mediumtext NOT NULL,  PRIMARY KEY (`ID`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+		$sql = "CREATE TABLE IF NOT EXISTS `ac_".$this->db_prefix."_settings` (  `ID` int(11) NOT NULL AUTO_INCREMENT,  `name` varchar(255) NOT NULL,  `value` mediumtext NOT NULL,  PRIMARY KEY (`ID`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 		
 		if ($conn->query($sql) === TRUE){
 			$sql2 = "INSERT INTO ac_".$this->db_prefix."_settings (name, value) VALUES ('sitename' ,'$this->site_sitename'), ('description' ,'$this->site_description'), ('username' ,'$this->site_username'), ('password' ,'$this->site_password'), ('timezone' ,'$this->site_timezone')";
 			
 			if ($conn->query($sql2) === TRUE){
 				
-				$sql3 = "CREATE TABLE IF NOT EXISTS `ac_".$this->db_prefix."_articles` (  `ID` int(11) NOT NULL AUTO_INCREMENT,  `article_date` datetime NOT NULL,  `article_date_gmt` datetime NOT NULL,  `article_title` varchar(256) NOT NULL,  `article_name` varchar(256) NOT NULL,  `article_content` longtext NOT NULL,  `article_type` varchar(256) NOT NULL,  `article_parent` int(11) NOT NULL,  PRIMARY KEY (`ID`),  UNIQUE KEY `article_name` (`article_name`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+				$sql3 = "CREATE TABLE IF NOT EXISTS `ac_".$this->db_prefix."_articles` (  `ID` int(11) NOT NULL AUTO_INCREMENT,  `article_date` datetime NOT NULL,  `article_date_gmt` datetime NOT NULL,  `article_title` varchar(255) NOT NULL,  `article_name` varchar(255) NOT NULL,  `article_content` longtext NOT NULL,  `article_type` varchar(255) NOT NULL,  `article_parent` int(11) NOT NULL,  PRIMARY KEY (`ID`),  UNIQUE KEY `article_name` (`article_name`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 				
 				if ($conn->query($sql3) === TRUE){
 					
-					$sql4 = "CREATE TABLE IF NOT EXISTS `ac_".$this->db_prefix."_pages` (  `ID` int(11) NOT NULL AUTO_INCREMENT,  `page_date` datetime NOT NULL,  `page_date_gmt` datetime NOT NULL,  `page_title` varchar(256) NOT NULL,  `page_name` varchar(256) NOT NULL,  `page_content` longtext NOT NULL,  PRIMARY KEY (`ID`),  UNIQUE KEY `page_name` (`page_name`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+					$sql4 = "CREATE TABLE IF NOT EXISTS `ac_".$this->db_prefix."_pages` (  `ID` int(11) NOT NULL AUTO_INCREMENT,  `page_date` datetime NOT NULL,  `page_date_gmt` datetime NOT NULL,  `page_title` varchar(255) NOT NULL,  `page_name` varchar(255) NOT NULL,  `page_content` longtext NOT NULL,  PRIMARY KEY (`ID`),  UNIQUE KEY `page_name` (`page_name`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 					
 					if ($conn->query($sql4) === TRUE){
 						
-						$sql5 = "CREATE TABLE IF NOT EXISTS `ac_".$this->db_prefix."_images` (  `ID` int(11) NOT NULL AUTO_INCREMENT,  `image_date` datetime NOT NULL,  `image_date_gmt` datetime NOT NULL,  `image_name` mediumtext NOT NULL,  `image_alt` varchar(256) NOT NULL,  `image_size` varchar(256) NOT NULL,  `image_location` varchar(256) NOT NULL,  `image_mime` varchar(256) NOT NULL,  PRIMARY KEY (`ID`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+						$sql5 = "CREATE TABLE IF NOT EXISTS `ac_".$this->db_prefix."_images` (  `ID` int(11) NOT NULL AUTO_INCREMENT,  `image_date` datetime NOT NULL,  `image_date_gmt` datetime NOT NULL,  `image_name` mediumtext NOT NULL,  `image_alt` varchar(255) NOT NULL,  `image_size` varchar(255) NOT NULL,  `image_location` varchar(255) NOT NULL,  `image_mime` varchar(255) NOT NULL,  PRIMARY KEY (`ID`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 						
 						if ($conn->query($sql5) === TRUE){
 							$file = fopen("../config-values.txt", "w");
