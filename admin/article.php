@@ -2,7 +2,7 @@
 
 /*
  * AdminConsole CORE is released under the GNU General Public License.
- * LICENSE.txt files in the main directory.
+ * LICENSE.txt file in the main directory.
 */
 
 session_start();
@@ -13,6 +13,16 @@ if (empty($_SESSION["AC-ADMIN-USERNAME"])) {
 	header("Location: ../ac-login.php");
 	
 	}
+
+$sql_settings = "SELECT value FROM ".$table_prefix."settings WHERE ID='5'";
+$result_settings = $conn->query($sql_settings);
+
+if ($result_settings->num_rows > 0){
+	while($row_settings = $result_settings->fetch_assoc()) {
+		date_default_timezone_set($row_settings["value"]);
+	}
+}
+
 if (isset($_GET["action"])){
 	
 	switch ($_GET["action"]) {
@@ -41,7 +51,7 @@ if (isset($_GET["action"])){
 				$article_type = "i";
 			}
 	
-					$sql = "UPDATE articles SET article_title='$article_title', article_name='$article_name', article_content='$article_content', article_type='$article_type', article_parent='$article_parent'  WHERE ID=".$_POST["id"]."";
+					$sql = "UPDATE ".$table_prefix."articles SET article_title='$article_title', article_name='$article_name', article_content='$article_content', article_type='$article_type', article_parent='$article_parent'  WHERE ID=".$_POST["id"]."";
 
 						if ($conn->query($sql) === TRUE) {
     	header("Location: article.php");
@@ -57,7 +67,7 @@ if (isset($_GET["action"])){
 					
 					if (isset($_POST["id"])){
 	
-					$sql = "DELETE FROM articles WHERE ID=".$_POST["id"]."";
+					$sql = "DELETE FROM ".$table_prefix."articles WHERE ID=".$_POST["id"]."";
 
 								if ($conn->query($sql) === TRUE) {
 								
@@ -142,7 +152,7 @@ if (isset($_GET["action"])){
             		</tr>
         		</thead>
         	<tbody>';					
-					$sql = "SELECT * FROM articles ORDER BY ID asc";
+					$sql = "SELECT * FROM ".$table_prefix."articles ORDER BY ID asc";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){
@@ -186,7 +196,7 @@ echo '
             		</tr>
         		</thead>
         	<tbody>';					
-					$sql = "SELECT * FROM articles ORDER BY ID asc";
+					$sql = "SELECT * FROM ".$table_prefix."articles ORDER BY ID asc";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){
@@ -218,7 +228,7 @@ echo '
 		}elseif ($_GET["action"] == "edit"){
 			
 			$id = $_POST['id'];
-			$sql = "SELECT * FROM articles WHERE ID='$id'";
+			$sql = "SELECT * FROM ".$table_prefix."articles WHERE ID='$id'";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){
@@ -268,7 +278,7 @@ echo '
             		</tr>
         		</thead>
         	<tbody>	';				
-					$sql2 = "SELECT * FROM images ORDER BY ID ASC";
+					$sql2 = "SELECT * FROM ".$table_prefix."images ORDER BY ID ASC";
 					$result2 = $conn->query($sql2);
 
 					if ($result2->num_rows > 0){
@@ -319,7 +329,7 @@ echo '
 							}elseif ($row["article_type"] == "i"){
 								echo '<option value="'.$row["article_parent"].'" selected>'; 
 								$parent = $row["article_parent"];
-								$sql4 = "SELECT * FROM pages WHERE ID=$parent";
+								$sql4 = "SELECT * FROM ".$table_prefix."pages WHERE ID=$parent";
 								$result4 = $conn->query($sql4);
 
 					if ($result4->num_rows > 0){
@@ -332,7 +342,7 @@ echo '
 					}echo'</option>	';
 								echo '<option value="0">This article will be lonely</option>';
 							}
-									$sql3 = "SELECT * FROM pages ORDER BY ID ASC";
+									$sql3 = "SELECT * FROM ".$table_prefix."pages ORDER BY ID ASC";
 								$result3 = $conn->query($sql3);
 
 					if ($result3->num_rows > 0){

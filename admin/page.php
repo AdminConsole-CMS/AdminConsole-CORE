@@ -2,7 +2,7 @@
 
 /*
  * AdminConsole CORE is released under the GNU General Public License.
- * LICENSE.txt files in the main directory.
+ * LICENSE.txt file in the main directory.
 */
 
 session_start();
@@ -13,6 +13,16 @@ if (empty($_SESSION["AC-ADMIN-USERNAME"])) {
 	header("Location: ../ac-login.php");
 	
 	}
+
+$sql_settings = "SELECT value FROM ".$table_prefix."settings WHERE ID='5'";
+$result_settings = $conn->query($sql_settings);
+
+if ($result_settings->num_rows > 0){
+	while($row_settings = $result_settings->fetch_assoc()) {
+		date_default_timezone_set($row_settings["value"]);
+	}
+}
+
 if (isset($_GET["action"])){
 	
 	switch ($_GET["action"]) {
@@ -33,7 +43,7 @@ if (isset($_GET["action"])){
 				$page_content = $_POST["content"];
 			}
 					
-			$sql = "UPDATE pages SET page_title='$page_title', page_name='$page_name', page_content='$page_content' WHERE ID=".$_POST["id"]."";
+			$sql = "UPDATE ".$table_prefix."pages SET page_title='$page_title', page_name='$page_name', page_content='$page_content' WHERE ID=".$_POST["id"]."";
 
 						if ($conn->query($sql) === TRUE) {
     	header("Location: page.php");
@@ -50,7 +60,7 @@ if (isset($_GET["action"])){
 					
 					if (isset($_POST["id"])){
 	
-					$sql = "DELETE FROM pages WHERE ID=".$_POST["id"]."";
+					$sql = "DELETE FROM ".$table_prefix."pages WHERE ID=".$_POST["id"]."";
 
 								if ($conn->query($sql) === TRUE) {
 								
@@ -138,7 +148,7 @@ if (isset($_GET["action"])){
             		</tr>
         		</thead>
         	<tbody>';
-					$sql = "SELECT * FROM pages ORDER BY ID asc LIMIT 1";
+					$sql = "SELECT * FROM ".$table_prefix."pages ORDER BY ID asc LIMIT 1";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){
@@ -157,7 +167,7 @@ if (isset($_GET["action"])){
     					}
 					} 
 					
-					$sql2 = "SELECT * FROM pages ORDER BY ID asc LIMIT 100000000 OFFSET 1 ";
+					$sql2 = "SELECT * FROM ".$table_prefix."pages ORDER BY ID asc LIMIT 100000000 OFFSET 1 ";
 					$result2 = $conn->query($sql2);
 
 					if ($result2->num_rows > 0){
@@ -201,7 +211,7 @@ echo '
             		</tr>
         		</thead>
         	<tbody>';
-					$sql = "SELECT * FROM pages ORDER BY ID asc LIMIT 1";
+					$sql = "SELECT * FROM ".$table_prefix."pages ORDER BY ID asc LIMIT 1";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){
@@ -220,7 +230,7 @@ echo '
     					}
 					} 
 					
-					$sql2 = "SELECT * FROM pages ORDER BY ID asc LIMIT 100000000 OFFSET 1 ";
+					$sql2 = "SELECT * FROM ".$table_prefix."pages ORDER BY ID asc LIMIT 100000000 OFFSET 1 ";
 					$result2 = $conn->query($sql2);
 
 					if ($result2->num_rows > 0){
@@ -252,7 +262,7 @@ echo '
 		}elseif ($_GET["action"] == "edit"){
 			
 			$id = $_POST['id'];
-			$sql = "SELECT * FROM pages WHERE ID='$id'";
+			$sql = "SELECT * FROM ".$table_prefix."pages WHERE ID='$id'";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){
@@ -302,7 +312,7 @@ echo '
             		</tr>
         		</thead>
         	<tbody>	';				
-					$sql2 = "SELECT * FROM images ORDER BY ID ASC";
+					$sql2 = "SELECT * FROM ".$table_prefix."images ORDER BY ID ASC";
 					$result2 = $conn->query($sql2);
 
 					if ($result2->num_rows > 0){

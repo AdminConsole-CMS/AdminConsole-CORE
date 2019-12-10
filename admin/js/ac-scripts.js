@@ -1,6 +1,6 @@
 /*
  * AdminConsole CORE is released under the GNU General Public License.
- * LICENSE.txt files in the main directory.
+ * LICENSE.txt file in the main directory.
 */
 
 $(document).ready(function () {

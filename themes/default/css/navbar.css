@@ -1,24 +1,4 @@
 .navbar {
-  padding: 5px 16px;
-  background-color: #000;
-  position: fixed;
-  right: 0;
-  left: 0;
-  top: 0;
+  	border-bottom: 2px solid black;
+	background-color: whitesmoke;
 }
-
-.navbar .navbar-brand {
-  font-family: arial;
-  font-weight: 600;
-  font-style: italic;
-  color: #fff!important;
-}
-
-.navbar .navbar-brand:hover {
-  color: whitesmoke;
-}
-
-.nav-item a {
-  color: #fff!important;
-}
-

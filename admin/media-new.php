@@ -2,7 +2,7 @@
 
 /*
  * AdminConsole CORE is released under the GNU General Public License.
- * LICENSE.txt files in the main directory.
+ * LICENSE.txt file in the main directory.
 */
 
 session_start();
@@ -12,6 +12,16 @@ if (empty($_SESSION["AC-ADMIN-USERNAME"])) {
 	header("Location: ../ac-login.php");
 	
 	}
+
+$sql_settings = "SELECT value FROM ".$table_prefix."settings WHERE ID='5'";
+$result_settings = $conn->query($sql_settings);
+
+if ($result_settings->num_rows > 0){
+	while($row_settings = $result_settings->fetch_assoc()) {
+		date_default_timezone_set($row_settings["value"]);
+	}
+}
+
 if (isset($_GET["action"])){
 	
 	switch ($_GET["action"]) {
@@ -52,7 +62,7 @@ if (isset($_GET["action"])){
 						$image_location = $target_file;
 						$image_mine = mime_content_type('../'.$target_file);
 						
-						$sql = "INSERT INTO images (image_date, image_date_gmt, image_name, image_alt, image_size, image_location, image_mime) VALUES ('$image_date', '$image_date_gmt', '$image_name', '', '$image_size', '$image_location', '$image_mine')";
+						$sql = "INSERT INTO ".$table_prefix."images (image_date, image_date_gmt, image_name, image_alt, image_size, image_location, image_mime) VALUES ('$image_date', '$image_date_gmt', '$image_name', '', '$image_size', '$image_location', '$image_mine')";
 						
 						if ($conn->query($sql) === TRUE){
 							
@@ -70,7 +80,7 @@ if (isset($_GET["action"])){
 					
 				if (isset($_GET["id"])){
 					
-					$sql = "SELECT * FROM images WHERE ID=".$_GET["id"]."";
+					$sql = "SELECT * FROM ".$table_prefix."images WHERE ID=".$_GET["id"]."";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){
@@ -79,7 +89,7 @@ if (isset($_GET["action"])){
 							$location = $row["image_location"];
 							unlink("../".$location);
 							
-							$sql = "DELETE FROM images WHERE ID=".$_GET["id"]."";
+							$sql = "DELETE FROM ".$table_prefix."images WHERE ID=".$_GET["id"]."";
 
 							if ($conn->query($sql) === TRUE) {
 								

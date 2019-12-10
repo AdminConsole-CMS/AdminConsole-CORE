@@ -2,7 +2,7 @@
 
 /*
  * AdminConsole CORE is released under the GNU General Public License.
- * LICENSE.txt files in the main directory.
+ * LICENSE.txt file in the main directory.
 */
 
 session_start();
@@ -13,6 +13,16 @@ if (empty($_SESSION["AC-ADMIN-USERNAME"])) {
 	header("Location: ../ac-login.php");
 	
 	}
+
+$sql_settings = "SELECT value FROM ".$table_prefix."settings WHERE ID='5'";
+$result_settings = $conn->query($sql_settings);
+
+if ($result_settings->num_rows > 0){
+	while($row_settings = $result_settings->fetch_assoc()) {
+		date_default_timezone_set($row_settings["value"]);
+	}
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
 	
 	if (isset($_GET["action"])){
@@ -31,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 			}
 			$page_date = date("Y-m-d H:i");
 			$page_date_gmt = gmdate("Y-m-d H:i");	
-			$sql = "INSERT INTO pages (page_date, page_date_gmt, page_title, page_name, page_content) VALUES ('$page_date', '$page_date_gmt', '$page_title', '$page_name', '$page_content')";
+			$sql = "INSERT INTO ".$table_prefix."pages (page_date, page_date_gmt, page_title, page_name, page_content) VALUES ('$page_date', '$page_date_gmt', '$page_title', '$page_name', '$page_content')";
 
 			if ($conn->query($sql) === TRUE) {
     			$ac_alert = "Page was succesfully added!";
@@ -135,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         		</thead>
         	<tbody>					
 					<?php 
-					$sql = "SELECT * FROM images ORDER BY ID ASC";
+					$sql = "SELECT * FROM ".$table_prefix."images ORDER BY ID ASC";
 					$result = $conn->query($sql);
 
 					if ($result->num_rows > 0){

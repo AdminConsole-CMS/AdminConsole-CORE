@@ -29,9 +29,12 @@
                     <li><a href="media-new.php">Add images</a></li>
                 </ul>
             </div>
+			<div class="ac-sidebar-link">
+				<a href="settings.php"><i class="fas fa-cogs"></i>&nbsp; Settings</a>
+			</div>	
         </div>
         <div class="ac-sidebar-bottom">
             <div><a href="#" title="Open/Close Fullscreen" onclick="ac_openFullscreen(); ac_closeFullscreen()"><i class="fas fa-expand"></i></a></div>
-            <div><a href="../ac-login.php?action=logout" title="Logout"><i class="fas fa-sign-out-alt"></i></a></div>
+            <div><a href="login.php?action=logout" title="Logout"><i class="fas fa-sign-out-alt"></i></a></div>
         </div>
     </div>

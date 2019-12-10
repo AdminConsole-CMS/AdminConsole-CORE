@@ -2,10 +2,14 @@
 
 /*
  * AdminConsole CORE is released under the GNU General Public License.
- * LICENSE.txt files in the main directory.
+ * LICENSE.txt file in the main directory.
 */
 
-require 'ac-config.php';
+if(!file_exists('ac-config.php')){
+	header("Location: install/index.php");
+}else{
+	require 'ac-config.php';
+}
 
 if (file_exists('ac-update.php')){
 	header("Location: ac-update.php");
@@ -15,10 +19,19 @@ if (file_exists('ac-upgrade.php')){
 	header("Location: ac-upgrade.php");
 }
 
+$sql_settings = "SELECT value FROM ".$table_prefix."settings WHERE ID='5'";
+$result_settings = $conn->query($sql_settings);
+
+if ($result_settings->num_rows > 0){
+	while($row_settings = $result_settings->fetch_assoc()) {
+		date_default_timezone_set($row_settings["value"]);
+	}
+}
+
 if (isset($_GET["p"])) {
 	
 	$name = $_GET["p"];
-	$sql = "SELECT * FROM pages WHERE page_name='$name'";
+	$sql = "SELECT * FROM ".$table_prefix."pages WHERE page_name='$name'";
 	$result = $conn->query($sql);
 	
 	if ($result->num_rows > 0) {
@@ -34,7 +47,7 @@ if (isset($_GET["p"])) {
 			$pageID = $row["ID"];
     	}
 		
-	$sql2 = "SELECT * FROM articles WHERE article_type='i' AND article_parent='$pageID'";
+	$sql2 = "SELECT * FROM ".$table_prefix."articles WHERE article_type='i' AND article_parent='$pageID'";
 	$result2 = $conn->query($sql2);
 	
 	if ($result2->num_rows > 0) {
@@ -57,7 +70,7 @@ if (isset($_GET["p"])) {
 	
 } elseif (empty($_GET["p"])) {
 	
-	$sql = "SELECT * FROM pages WHERE ID='1'";
+	$sql = "SELECT * FROM ".$table_prefix."pages WHERE ID='1'";
 	$result = $conn->query($sql);
 	
 	if ($result->num_rows > 0) {
@@ -71,7 +84,7 @@ if (isset($_GET["p"])) {
 			$articleContent[] = "";
     	}
 		
-	$sql2 = "SELECT * FROM articles WHERE article_type='i' AND article_parent='1'";
+	$sql2 = "SELECT * FROM ".$table_prefix."articles WHERE article_type='i' AND article_parent='1'";
 	$result2 = $conn->query($sql2);
 	
 	if ($result2->num_rows > 0) {
@@ -104,7 +117,20 @@ if (isset($_GET["p"])) {
 <title> <?php echo $pageTitle ?> </title>
 	
 <meta name="author" content="">
-<meta name="description" content=""> 
+	
+<?php
+	
+$sql_settings = "SELECT value FROM ".$table_prefix."settings WHERE ID='2'";
+$result_settings = $conn->query($sql_settings);
+
+if ($result_settings->num_rows > 0){
+	while($row_settings = $result_settings->fetch_assoc()) {
+		echo '<meta name="description" content="'.$row_settings["value"].'">';
+	}
+}
+	
+?>	
+ 
 
 <?php require "themes/default/head.php"; ?>
 </head>
@@ -115,7 +141,7 @@ if (isset($_GET["p"])) {
 	<?php 
 	
 	echo $pageContent.implode($articleContent);
-	
+
 	?>
 </main>	
 <?php require "themes/default/footer.php"; ?>		

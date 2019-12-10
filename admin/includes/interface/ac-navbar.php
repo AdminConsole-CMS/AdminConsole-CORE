@@ -17,7 +17,9 @@
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false"><img src="img/ac1.png">&nbsp;<?php if (isset($_SESSION["AC-ADMIN-USERNAME"])){echo $_SESSION["AC-ADMIN-USERNAME"];} ?></a>
-                            <div class="dropdown-menu dropdown-menu-right" role="menu"><a class="dropdown-item" role="presentation" href="../ac-login.php?action=logout"><i class="fas fa-sign-out-alt"></i>&nbsp; Log Out</a></div>
+                            <div class="dropdown-menu dropdown-menu-right" role="menu">
+								<a class="dropdown-item" role="presentation" href="settings.php"><i class="fas fa-cogs"></i>&nbsp; Settings</a>
+								<a class="dropdown-item" role="presentation" href="login.php?action=logout"><i class="fas fa-sign-out-alt"></i>&nbsp; Log Out</a></div>
                         </li>
                     </ul>
                 </div>
