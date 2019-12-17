@@ -10,7 +10,7 @@ require "../ac-config.php";
 include "includes/functions.php";
 if (empty($_SESSION["AC-ADMIN-USERNAME"])) {
 	
-	header("Location: ../ac-login.php");
+	header("Location: login.php");
 	
 	}
 
