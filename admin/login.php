@@ -40,7 +40,7 @@ $AC_Login -> checker();
                     </div>
                     <div class="form-group"><button class="btn btn-primary" type="submit">Log In</button></div>
                 </form>
-                <div class="ac-login-add"><a href="index.php">«&nbsp;Back&nbsp;to&nbsp;site</a></div>
+                <div class="ac-login-add"><a href="../index.php">«&nbsp;Back&nbsp;to&nbsp;site</a></div>
             </div>
         </div>
     </div>
